@@ -72,6 +72,8 @@ services:
       dockerfile: Dockerfile-sql
     depends_on:
       - jobmanager
+    ports:
+      - 8084:8081
     command: taskmanager
     environment:
       - |
@@ -89,6 +91,8 @@ services:
       - embedded 
       - -l
       - /opt/sql-client/lib
+    ports:
+      - 8083:8081
     depends_on:
       - jobmanager
     environment:
@@ -97,5 +101,6 @@ services:
         FLINK_RPOPERTIES=
         jobmanager.rpc.address: jobmanager
         rest.address: jobmanager
+
 
 
