@@ -54,16 +54,17 @@ services:
 
   jobmanager:
     container_name: jobmanager
-    build:
-      context: .
-      dockerfile: Dockerfile-sql
+    image: flink:1.19.0-scala_2.12-java11
+    # build:
+    #   context: .
+    #   dockerfile: Dockerfile-sql
     ports:
       - 8081:8081
-    command: jobmanager
     environment:
-      - |
-        FLINK_RPOPERTIES=
-        jobmanager.rpc.address: jobmanager
+      - JOB_MANAGER_RPC_ADDRESS=jobmanager 
+    command: jobmanager
+    # environment:
+    #   - FLINK_PROPERTIES=jobmanager.rpc.address: jobmanager
 
   taskmanager:
     container_name: taskmanager
@@ -72,14 +73,10 @@ services:
       dockerfile: Dockerfile-sql
     depends_on:
       - jobmanager
-    ports:
-      - 8084:8081
     command: taskmanager
     environment:
-      - |
-        FLINK_PROPERTIES=
-        jobmanager.rpc.address: jobmanager
-        taskmanager.numberOfTaskSlots: 20
+      - JOB_MANAGER_RPC_ADDRESS=jobmanager # jobmanager.rpc.address: jobmanager
+        # taskmanager.numberOfTaskSlots: 20
 
   sql-client:
     container_name: sql-client
@@ -91,16 +88,14 @@ services:
       - embedded 
       - -l
       - /opt/sql-client/lib
-    ports:
-      - 8083:8081
     depends_on:
       - jobmanager
     environment:
       - FLINK_JOBMANAGER_HOST=jobmanager
-      - |
-        FLINK_RPOPERTIES=
-        jobmanager.rpc.address: jobmanager
-        rest.address: jobmanager
+      # - |
+      #   FLINK_PROPERTIES=
+      #   jobmanager.rpc.address: jobmanager
+      #   rest.address: jobmanager
 
 
 
