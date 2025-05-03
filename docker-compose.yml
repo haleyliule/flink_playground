@@ -70,7 +70,7 @@ services:
     container_name: taskmanager
     build:
       context: .
-      dockerfile: Dockerfile-sql
+      dockerfile: Dockerfile
     depends_on:
       - jobmanager
     command: taskmanager
@@ -82,7 +82,7 @@ services:
     container_name: sql-client
     build:
       context: .
-      dockerfile: Dockerfile-sql
+      dockerfile: Dockerfile
     command:
       - /opt/flink/bin/sql-client.sh
       - embedded 
@@ -92,10 +92,10 @@ services:
       - jobmanager
     environment:
       - FLINK_JOBMANAGER_HOST=jobmanager
-      # - |
-      #   FLINK_PROPERTIES=
-      #   jobmanager.rpc.address: jobmanager
-      #   rest.address: jobmanager
+      - |
+        FLINK_PROPERTIES=
+        jobmanager.rpc.address: jobmanager
+        rest.address: jobmanager
 
 
 
